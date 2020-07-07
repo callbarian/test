@@ -1,0 +1,9 @@
+  using gcc : 7.3.0 : x86_64-conda_cos6-linux-gnu-c++
+              : # options
+                  <archiver>x86_64-conda_cos6-linux-gnu-ar
+                  <asmflags>-march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -I/home/callbarian/bin/miniconda3/envs/c3d_py36/include -fdebug-prefix-map=/tmp/build/80754af9/bst_1572609741367/work=/usr/local/src/conda/bst-1.71.0 -fdebug-prefix-map=/home/callbarian/bin/miniconda3/envs/c3d_py36=/usr/local/src/conda-prefix
+                  <cflags>-march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -I/home/callbarian/bin/miniconda3/envs/c3d_py36/include -fdebug-prefix-map=/tmp/build/80754af9/bst_1572609741367/work=/usr/local/src/conda/bst-1.71.0 -fdebug-prefix-map=/home/callbarian/bin/miniconda3/envs/c3d_py36=/usr/local/src/conda-prefix
+                  <cxxflags>-fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -I/home/callbarian/bin/miniconda3/envs/c3d_py36/include -fdebug-prefix-map=/tmp/build/80754af9/bst_1572609741367/work=/usr/local/src/conda/bst-1.71.0 -fdebug-prefix-map=/home/callbarian/bin/miniconda3/envs/c3d_py36=/usr/local/src/conda-prefix
+                  <linkflags>-Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/callbarian/bin/miniconda3/envs/c3d_py36/lib -Wl,-rpath-link,/home/callbarian/bin/miniconda3/envs/c3d_py36/lib -L/home/callbarian/bin/miniconda3/envs/c3d_py36/lib
+                  <ranlib>x86_64-conda_cos6-linux-gnu-ranlib
+              ;
