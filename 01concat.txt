@@ -1,0 +1,2 @@
+file '/Users/iseongmin/Downloads/test/git_fileTransfer/test/01_0014.mp4'
+file '/Users/iseongmin/Downloads/test/git_fileTransfer/test/01_0015.mp4' 
