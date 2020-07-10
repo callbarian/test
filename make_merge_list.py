@@ -52,7 +52,7 @@ def merge_2_videos(i,video_root,save_list_root,video,first_video,first_video_pat
         return i+1 
     else:
         second_video_path = os.path.join(video_root,video+'/'+video+'.mp4')
-        save_path = first_video[0] + '-' + video
+        save_path = first_video[0] + '-' + video + '.txt'
         with open(os.path.join(save_list_root,save_path),'w') as f:
             first_line = "file " + "\'" + first_video_path[0] + "\'" + "\n"
             second_line = "file " + "\'" +second_video_path + "\'"
@@ -73,7 +73,7 @@ def merge_3_videos(i,video_root,save_list_root,video,first_video,first_video_pat
 
     else:
         third_video_path = os.path.join(video_root,video+'/'+video+'.mp4')
-        save_path = first_video[0] + '-' + second_video[0] + '-' +video
+        save_path = first_video[0] + '-' + second_video[0] + '-' +video+'.txt'
         with open(os.path.join(save_list_root,save_path),'w') as f:
             first_line = "file " + "\'" + first_video_path[0] + "\'" + "\n"
             second_line = "file " + "\'" +second_video_path[0] + "\'" + "\n"
