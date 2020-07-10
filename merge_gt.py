@@ -1,8 +1,9 @@
 import os
+import scipy.io as sio
 
 def make_list():
-    video_root = os.getcwd() + '/videos'
-    save_list_root = os.getcwd() + '/merge_videos'
+    video_root = os.getcwd() + '/gt_data'
+    save_list_root = os.getcwd() + '/gt_data_merge'
     i = 0
     first_video_path = [''] 
     first_video = ['']
@@ -46,41 +47,38 @@ def make_list():
 
 def merge_2_videos(i,video_root,save_list_root,video,first_video,first_video_path):
     if i is 0:
-        first_video_path[0] = os.path.join(video_root,video+'/'+video+'.mp4')
+        first_video_path[0] = os.path.join(video_root,video+'.npy')
         first_video[0] = video
         #i+=1
         return i+1 
     else:
-        second_video_path = os.path.join(video_root,video+'/'+video+'.mp4')
-        save_path = first_video[0] + '-' + video + '.txt'
-        with open(os.path.join(save_list_root,save_path),'w') as f:
-            first_line = "file " + "\'" + first_video_path[0] + "\'" + "\n"
-            second_line = "file " + "\'" +second_video_path + "\'"
-            combined = first_line + second_line
-            f.write(combined)
-            f.close()
+        second_video_path = os.path.join(video_root,video+'.npy')
+        save_path = first_video[0] + '-' + video + '.mat'
+        data1 = np.load(first_video_path)
+        data2 = np.load(second_video_path)
+        data1.extend(data2)
+        sio.savemat(os.path.join(save_list_root,save_path),{'gt':data1})
         return i-1
 def merge_3_videos(i,video_root,save_list_root,video,first_video,first_video_path,second_video,second_video_path):
     if i is 0:
-        first_video_path[0] = os.path.join(video_root,video+'/'+video+'.mp4')
+        first_video_path[0] = os.path.join(video_root,video+'.npy')
         first_video[0] = video
         #i+=1
         return i+1 
     elif i is 1:
-        second_video_path[0] = os.path.join(video_root,video+'/'+video+'.mp4')
+        second_video_path[0] = os.path.join(video_root,video+'.npy')
         second_video[0] = video
         return i+1
 
     else:
-        third_video_path = os.path.join(video_root,video+'/'+video+'.mp4')
-        save_path = first_video[0] + '-' + second_video[0] + '-' +video+'.txt'
-        with open(os.path.join(save_list_root,save_path),'w') as f:
-            first_line = "file " + "\'" + first_video_path[0] + "\'" + "\n"
-            second_line = "file " + "\'" +second_video_path[0] + "\'" + "\n"
-            third_line = "file " + "\'" +third_video_path + "\'" 
-            combined = first_line + second_line +third_line
-            f.write(combined)
-            f.close()
+        third_video_path = os.path.join(video_root,video+'.npy')
+        save_path = first_video[0] + '-' + second_video[0] + '-' +video+'.mat'
+        data1 = np.load(first_video_path)
+        data2 = np.load(second_video_path)
+        data3 = np.load(third_video_path)
+        data1.extend(data2)
+        data1.extend(data3)
+        sio.savemat(os.path.join(save_list_root,save_path),{'gt':data1})
         return 0   
 
 
