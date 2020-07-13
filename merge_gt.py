@@ -1,5 +1,6 @@
 import os
 import scipy.io as sio
+import numpy as np
 
 def make_list():
     video_root = os.getcwd() + '/gt_data'
@@ -47,38 +48,38 @@ def make_list():
 
 def merge_2_videos(i,video_root,save_list_root,video,first_video,first_video_path):
     if i is 0:
-        first_video_path[0] = os.path.join(video_root,video+'.npy')
-        first_video[0] = video
+        first_video_path[0] = os.path.join(video_root,video)
+        first_video[0] = video.split('.')[0]
         #i+=1
         return i+1 
     else:
-        second_video_path = os.path.join(video_root,video+'.npy')
-        save_path = first_video[0] + '-' + video + '.mat'
-        data1 = np.load(first_video_path)
+        second_video_path = os.path.join(video_root,video)
+        save_path = first_video[0] + '-' + video.split('.')[0] + '.mat'
+        data1 = np.load(first_video_path[0])
         data2 = np.load(second_video_path)
-        data1.extend(data2)
-        sio.savemat(os.path.join(save_list_root,save_path),{'gt':data1})
+        combined_data = np.concatenate((data1,data2),axis=None)
+        sio.savemat(os.path.join(save_list_root,save_path),{'gt':combined_data})
         return i-1
 def merge_3_videos(i,video_root,save_list_root,video,first_video,first_video_path,second_video,second_video_path):
     if i is 0:
-        first_video_path[0] = os.path.join(video_root,video+'.npy')
-        first_video[0] = video
+        first_video_path[0] = os.path.join(video_root,video)
+        first_video[0] = video.split('.')[0]
         #i+=1
         return i+1 
     elif i is 1:
-        second_video_path[0] = os.path.join(video_root,video+'.npy')
-        second_video[0] = video
+        second_video_path[0] = os.path.join(video_root,video)
+        second_video[0] = video.split('.')[0]
         return i+1
 
     else:
-        third_video_path = os.path.join(video_root,video+'.npy')
-        save_path = first_video[0] + '-' + second_video[0] + '-' +video+'.mat'
-        data1 = np.load(first_video_path)
-        data2 = np.load(second_video_path)
+        third_video_path = os.path.join(video_root,video)
+        save_path = first_video[0] + '-' + second_video[0] + '-' +video.split('.')[0]+'.mat'
+        data1 = np.load(first_video_path[0])
+        data2 = np.load(second_video_path[0])
         data3 = np.load(third_video_path)
-        data1.extend(data2)
-        data1.extend(data3)
-        sio.savemat(os.path.join(save_list_root,save_path),{'gt':data1})
+        combined_data = np.concatenate((data1,data2),axis=None)
+        combined_data = np.concatenate((combined_data,data3),axis=None)
+        sio.savemat(os.path.join(save_list_root,save_path),{'gt':combined_data})
         return 0   
 
 
