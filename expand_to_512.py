@@ -20,7 +20,7 @@ def expand():
         gt_file_path = os.path.join(numpy_video_path,gt_file)
         gt_loaded = np.load(gt_file_path)
         if gt_loaded.shape[0] < 512:
-            input_video_path = os.path.join(video_path,video)
+            input_video_path = os.path.join(video_path,video,video+'.mp4')
             output_video_path = os.path.join(result_path,video)
             file_name = video.split('.')[0] +'.jpg'
             #print(os.path.join(output_video_path,file_name))
