@@ -16,6 +16,17 @@ def shuffle_videos():
 
     save_test_path_combined = os.getcwd() + '/test'
     gt_save_test_path_combined = os.getcwd() + '/gt_test'
+
+    path_list = []
+    path_list.append(save_train_path_normal)
+    path_list.append(save_train_path_abnormal)
+    path_list.append(save_test_path_combined)
+    path_list.append(gt_save_test_path_combined)
+
+    for path in path_list:
+        if not os.path.exists(path):
+            os.makedirs(path)
+    
     normal_list = sorted(os.listdir(normal_dir))
     abnormal_list = sorted(os.listdir(abnormal_dir))
 
