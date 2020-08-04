@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-def merge():
+def extract_videos():
     current_path = os.getcwd()
     video_path = os.path.join(current_path,'videos')
     videos = sorted(os.listdir(video_path))
@@ -27,4 +27,4 @@ def merge():
         print(output)
 
 if __name__ == "__main__":
-    merge()
+    extract_videos()
