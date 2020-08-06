@@ -1,4 +1,4 @@
-name: Anomaly_py36
+name: Anomaly_py36v2
 channels:
   - defaults
 dependencies:
