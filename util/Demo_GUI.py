@@ -37,7 +37,7 @@ numpy.random.seed(seed)
 from keras import backend as K
 import os
 import math
-import time_merge
+#import time_merge
 import glob
 import shutil
 import subprocess
@@ -213,8 +213,8 @@ class PrettyWidget(QtWidgets.QWidget):
         self.setWindowTitle('Anomaly Detection')
         btn = QtWidgets.QPushButton('ANOMALY DETECTION SYSTEM \n Please select video', self)
 
-        Model_dir = '/home/callbarian/AnomalyDetectionCVPR2018-master/'
-        weights_path = Model_dir + 'weights_L1L2.mat'
+        Model_dir = os.getcwd()+'/TrainedModel_MIL_C3D/'
+        weights_path = Model_dir + 'weightsAnomalyL1L2_4000.mat'
         model_path = Model_dir + 'model.json'
         ########################################
         ######    LOAD ABNORMALITY MODEL   ######
@@ -230,25 +230,31 @@ class PrettyWidget(QtWidgets.QWidget):
         global total_frame
          
         time_series = []
-        save_path = '/home/callbarian/C3D/saved_videos/'
-        original_path = '/home/callbarian/C3D/moved_videos/'
+        #save_path = '/home/callbarian/C3D/saved_videos/'
+        #original_path = '/home/callbarian/C3D/moved_videos/'
         btn.resize(btn.sizeHint())
-        for file in sorted(os.listdir("/home/callbarian/C3D/videos")):
-            video_format = ''
-            for file2 in os.listdir("/home/callbarian/C3D/videos/" + file):
-                if(file2.split('.')[1] != 'txt'):
-                    video_format = file2
-                read_file = "/home/callbarian/C3D/videos/"+ file + "/" + file2  
-                self.SingleBrowse(read_file)
+        feature_path = os.getcwd()+'/Test/test'
+        gt_path = './Test/gt_test'
+        feature_list = sorted(os.listdir(feature_path))
+        gt_list = sorted(os.listdir(gt_path))
+        for feature,gt in zip(feature_list,gt_list):
+            #video_format = ''
+            #for file2 in os.listdir("/home/callbarian/C3D/videos/" + file):
+                #if(file2.split('.')[1] != 'txt'):
+                    #video_format = file2
+                #read_file = "/home/callbarian/C3D/videos/"+ file + "/" + file2  
+                single_feature = os.path.join(feature_path,feature)
+                single_gt = os.path.join(gt_path,gt)
+                self.SingleBrowse(single_feature,single_gt)
                 btn.move(150, 200)
                 self.show()
-            video_format = '.' + video_format.split('.')[1]    
-            print("video format : " + video_format)
-            video_path = original_path + file + video_format   
-            save_video(save_path,video_path,time_series)
-            print(time_series)
-            time_series = []
-            total_frame = 0    
+           # video_format = '.' + video_format.split('.')[1]    
+            #print("video format : " + video_format)
+            #video_path = original_path + file + video_format   
+            #save_video(save_path,video_path,time_series)
+            #print(time_series)
+            #time_series = []
+            #total_frame = 0    
         #time_series=time_merge.time_stamp(total_frame,time_series)
         #print("time series : ",time_series)
         
@@ -263,27 +269,31 @@ class PrettyWidget(QtWidgets.QWidget):
 
 
 
-    def SingleBrowse(self,read_file):
+    def SingleBrowse(self,single_feature,single_gt):
         global total_frame
-        video_path = read_file
-        verify_path = video_path[-4:]
+        #verify_path = video_path[-4:]
         #print(verify_path)
-        if(verify_path==".txt"):
-                print("skipping.........................")
-                return
-        print(video_path)
-        cap = cv2.VideoCapture(video_path)
+        #if(verify_path==".txt"):
+        #        print("skipping.........................")
+        #        return
+        #print(video_path)
+        #cap = cv2.VideoCapture(video_path)
         #Total_frames = cap.get(cv2.CV_CAP_PROP_FRAME_COUNT)
-        print(cv2)
-        FeaturePath=(video_path)
-        FeaturePath = FeaturePath[0:-4]
-        
-        root_feature_path = './features/'
+        #print(cv2)
+        #FeaturePath=(video_path)
+        file_name = single_feature[0:-4]
+        file_name = file_name.split('/')[-1]
+
+        root_feature_path = './Test/test'
         save_path = './Model_Res/'
-        Feature_name = FeaturePath.split('/')[-1]
-        FeaturePath = root_feature_path + Feature_name + '.txt'
-        inputs = load_dataset_One_Video_Features(FeaturePath)
-        Total_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)        
+        #Feature_name = FeaturePath.split('/')[-1]
+        #FeaturePath = root_feature_path + Feature_name + '.txt'
+        inputs = load_dataset_One_Video_Features(single_feature)
+        #Total_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+        gt_data = np.load(single_gt)
+        Total_frames = len(gt_data)
         total_segments = np.linspace(1, Total_frames, num=len(inputs)+1)
         total_segments = total_segments.round()
         #inputs = np.reshape(inputs, (32, 4096))
@@ -304,8 +314,8 @@ class PrettyWidget(QtWidgets.QWidget):
         scores = Frames_Score
         scores1=scores.reshape((scores.shape[1],))
         scores1 = savitzky_golay(scores1, 101, 3)
-        savemat(save_path+Feature_name+'.mat',{'Score':scores1})
-        print("saving {}.mat".format(Feature_name))
+        savemat(save_path+file_name+'.mat',{'Score':scores1})
+        print("saving {}.mat".format(file_name))
         
         '''
         cap = cv2.VideoCapture((video_path))
