@@ -2,7 +2,11 @@ import os
 import subprocess
 import numpy as np
 
-def extract():
+def extract(dir_path):
+    files = sorted(os.listdir(dir_path))
+    for file in files:
+        if file.split('.')[1]=='xml'
+    
     gt_txt_path = os.getcwd() +'/Temporal_Anomaly_Annotation_for_Testing_Videos.txt'
     video_dir = os.getcwd() + '/test_videos'
     result_path = os.getcwd() + '/gt'
@@ -49,4 +53,7 @@ def extract():
             
     print('total videos processed: ',count)
 if __name__ =="__main__": 
-    extract()
+    file_dir = '101-1_swoon01_place03_day'
+    intput_dir_path = os.getcwd() + '/clips_dataset/faint'
+    assert os.path.exists(os.path.join(intput_dir_path,file_dir)),'path does not exist, check the path'
+    extract(os.path.join(intput_dir_path,file_dir))
