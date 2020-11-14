@@ -119,28 +119,28 @@ class MIL():
 
 
     def check_trained_model(self,trained_model):
-    ''' Check if trained_model is there. otherwise, download '''
+        ''' Check if trained_model is there. otherwise, download '''
 
-    if os.path.isfile(trained_model):
-        print("[Info] trained_model={} found. Good to go!")
-    else:
-        download_cmd = [
-                "wget",
-                "-O",
-                trained_model,
-                "https://www.dropbox.com/s/vr8ckp0pxgbldhs/conv3d_deepnetA_sport1m_iter_1900000?dl=0",
-                ]
+        if os.path.isfile(trained_model):
+            print("[Info] trained_model={} found. Good to go!")
+        else:
+            download_cmd = [
+                    "wget",
+                    "-O",
+                    trained_model,
+                    "https://www.dropbox.com/s/vr8ckp0pxgbldhs/conv3d_deepnetA_sport1m_iter_1900000?dl=0",
+                    ]
 
-        print("[Info] Download Sports1m pre-trained model: \"{}\"".format(
-                ' '.join(download_cmd)
-                ))
+            print("[Info] Download Sports1m pre-trained model: \"{}\"".format(
+                    ' '.join(download_cmd)
+                    ))
 
-        return_code = subprocess.call(download_cmd)
+            return_code = subprocess.call(download_cmd)
 
-        if return_code != 0:
-            print("[Error] Downloading of pretrained model failed. Check!")
-            sys.exit(-10)
-    return
+            if return_code != 0:
+                print("[Error] Downloading of pretrained model failed. Check!")
+                sys.exit(-10)
+        return
 
     def get_frame_count(self,video):
         ''' Get frame counts and FPS for a video '''
@@ -750,10 +750,10 @@ class MIL():
             "conv3d_deepnetA_sport1m_iter_1900000"
             )
         # check model
-        check_trained_model(trained_model)
+        self.check_trained_model(trained_model)
 
         # save extracted frames temporarily
-        tmp_dir = "./temp"
+        tmp_dir = os.getcwd()+"/MIL/C3D/temp"
         if not os.path.exists(tmp_dir):
             os.makedirs(tmp_dir)
 
@@ -805,7 +805,7 @@ class MIL():
         feature_prototxt = os.path.join(tmp_dir, 'feature_extraction.prototxt')
         if not os.path.exists(tmp_dir):
             os.mkdir(tmp_dir)
-        generate_feature_prototxt(feature_prototxt, input_file)
+        self.generate_feature_prototxt(feature_prototxt, input_file)
 
         # first, populate input.txt, and output_prefix.txt files
         # each line corresponds to a 16-frame video clip
@@ -830,7 +830,7 @@ class MIL():
 
             # where to save extracted frames
             frame_dir = os.path.join(tmp_dir, video_id)
-            extract_frames(os.path.join(file_path,video_file), start_frame, frame_dir)
+            self.extract_frames(os.path.join(file_path,video_file), start_frame, frame_dir)
 
             # a dummy label
             dummy_label = 0
@@ -849,7 +849,7 @@ class MIL():
 
         # second, run C3D extraction (with a batch)
         if os.path.isfile(input_file) and os.path.getsize(input_file):
-            return_code = run_C3D_extraction(
+            return_code = self.run_C3D_extraction(
                     feature_prototxt,
                     output_prefix_file,
                     feature_layer,
@@ -877,7 +877,7 @@ class MIL():
                             tmp_dir,
                             video_id + '_{0:06f}'.format(start_frame)
                             )
-                    feature = get_features([clip_id], feature_layer)
+                    feature = self.get_features([clip_id], feature_layer)
 
                     #print ("[Info] Saving C3D feature as {}".format(feature_filename,))
                     #print(feature)
@@ -897,29 +897,29 @@ class MIL():
                 print('thirt2_shorts: ',thirty2_shots)
                 for i in range(0,len(thirty2_shots)-1):
                 
-                ss=int(thirty2_shots[i])
-                ee=int(thirty2_shots[i+1])-1
-                
-                if i==len(thirty2_shots):
-                    ee=thirty2_shots[i+1]
-                    print('last iter ')
-                print(ss,ee)
-                if ss==len(data):
-                    ss=ss-1
+                    ss=int(thirty2_shots[i])
+                    ee=int(thirty2_shots[i+1])-1
+                    
+                    if i==len(thirty2_shots):
+                        ee=thirty2_shots[i+1]
+                        print('last iter ')
+                    print(ss,ee)
+                    if ss==len(data):
+                        ss=ss-1
 
-                if ss==ee:
-                    temp_vect=data[ss,:]
-                elif ee<ss:
-                    temp_vect=data[ss,:]
-                else:
-                    temp_vect=data[ss:ee,:].mean(axis=0);
-                print('len of vector: ',len(temp_vect))
-                temp_vect=temp_vect/np.linalg.norm(temp_vect);
-                if np.linalg.norm==0:
-                    print(error)
-                    exit()
-                if len(temp_vect)!=0:
-                    Segments_Features.append(temp_vect.tolist());
+                    if ss==ee:
+                        temp_vect=data[ss,:]
+                    elif ee<ss:
+                        temp_vect=data[ss,:]
+                    else:
+                        temp_vect=data[ss:ee,:].mean(axis=0);
+                    print('len of vector: ',len(temp_vect))
+                    temp_vect=temp_vect/np.linalg.norm(temp_vect);
+                    if np.linalg.norm==0:
+                        print(error)
+                        exit()
+                    if len(temp_vect)!=0:
+                        Segments_Features.append(temp_vect.tolist());
                 print('length of final vector: ',len(Segments_Features))
                 with open(os.path.join(c3d_feature_outdir,video_id+".txt"),'w') as f:
                     for vec in Segments_Features:
