@@ -96,8 +96,8 @@ class MIL():
             
             #skip original videos
             if file.split('.')[0] == video_dir or file.split('.')[1] != 'mp4':
-            print('skipping'.format(file))
-            continue
+                print('skipping'.format(file))
+                continue
 
             # process each video segments
             self.main(os.path.join(video_path,video_dir),file)
@@ -299,7 +299,7 @@ class MIL():
         source: "{0}"
         use_image: true
         mean_file: "{1}"
-        self.batch_size: 50
+        batch_size: 50
         crop_size: 112
         mirror: false
         show_data: 0
@@ -744,7 +744,7 @@ class MIL():
 
         # trained model (will be downloaded if missing)
         trained_model = os.path.join(
-            caffe_root,
+            self.caffe_root,
             "examples",
             "c3d_feature_extraction",
             "conv3d_deepnetA_sport1m_iter_1900000"
@@ -777,7 +777,7 @@ class MIL():
         max_processing_sec = 599
 
         # get frame counts and fps
-        num_frames, fps = get_frame_count(os.path.join(file_path,video_file))
+        num_frames, fps = self.get_frame_count(os.path.join(file_path,video_file))
         print ("[Info] num_frames={}, fps={}".format(num_frames, fps))
         if num_frames < int(sample_every_N_sec * fps):
             start_frame = (num_frames - num_frames_per_clip) / 2
